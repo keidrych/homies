@@ -1,0 +1,16 @@
+{
+  "nixpkgs": {
+    "owner": "NixOS",
+    "repo": "nixpkgs-channels",
+    "branch": "nixos-18.03",
+    "rev": "5d19e3e78fb89f01e7fb48acc341687e54d6888f",
+    "sha256": "0vdmbhn5clwny155m21ygjglq3qyi7qki0sbzrb4a1p7sv1yfgp6"
+  },
+  "snack": {
+    "owner": "nmattia",
+    "repo": "snack",
+    "branch": "master",
+    "rev": "4df17e3efa4a47db237b14098cf8495a489e3c6d",
+    "sha256": "1g0h2nbviqmkk6f617dcjpaxix77bmw8rh9bapayad8nph320h8c"
+  }
+}

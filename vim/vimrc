@@ -2,74 +2,28 @@
 " netrw + vinegar is awesome but has a bug with Obsession: https://github.com/tpope/vim-vinegar/issues/13
 let loaded_netrwPlugin = 1
 
-if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
-  silent execute "!curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-  autocmd VimEnter * PlugInstall | source $MYVIMRC
-endif
+" Enable shared cliboard
+set clipboard=unnamedplus
 
 " Dotfiles for inspiration
 " https://github.com/statico/dotfiles/blob/master/.vim/vimrc
 " https://github.com/skwp/dotfiles
 " https://github.com/junegunn/dotfiles/blob/master/vimrc
 "
-call plug#begin('~/.config/plugged')
-"= Mandatory
-Plug 'jooize/vim-colemak'
-Plug 'sheerun/vim-polyglot'
-Plug 'justinmk/vim-dirvish'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-unimpaired'
-Plug 'itchyny/lightline.vim'
-Plug 'maximbaz/lightline-ale'
+" Additional Plugins to Experiment with
 "Plug 'taohex/lightline-buffer'
 "Plug 'mhinz/vim-startify'
 "Plug 'jeetsukumaran/vim-indentwise'
 "Plug 'wellle/targets.vim'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim', {'do': 'cargo install ripgrep'}
-Plug 'kassio/neoterm'
-Plug 'w0rp/ale'
 "Plug 'tpope/vim-fugitive'
 "Plug 'idanarye/vim-merginal'
 "Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-repeat'
-Plug 'airblade/vim-gitgutter'
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-Plug 'steelsojka/deoplete-flow'
-Plug 'janko-m/vim-test'
-Plug 'editorconfig/editorconfig-vim'
-Plug 't9md/vim-choosewin'
-Plug 'zhaocai/goldenview.vim'
-Plug 'tpope/vim-obsession'
-Plug 'nathanaelkane/vim-indent-guides'
 "Plug 'chrisbra/nrrwrgn'
-Plug 'jeffkreeftmeijer/vim-numbertoggle'
-Plug 'niftylettuce/vim-jinja'
-Plug 'jiangmiao/auto-pairs'
-Plug '907th/vim-auto-save'
-Plug 'c9s/vikube.vim'
-Plug 'justinmk/vim-sneak'
-Plug 'gcmt/taboo.vim'
+"Plug 'c9s/vikube.vim'
+"Plug 'gcmt/taboo.vim'
 "Plug 'airblade/vim-rooter'
-Plug 'samuelsimoes/vim-drawer'
-Plug 'tpope/vim-dispatch'
-Plug 'Keidrych/tap-vim', {'branch': 'compiler'}
 
-" On-Demand ~ FileTypes
-
-" On-Demand ~ Functionality
-
-" Theme
-Plug 'NLKNguyen/papercolor-theme'
-"Plug 'morhetz/gruvbox'
-call plug#end()
+"Plug 'Keidrych/tap-vim', {'branch': 'compiler'}
 
 " For any plugins that use this, make their keymappings use comma
 let mapleader = " "
@@ -248,4 +202,34 @@ augroup VCenterCursor
 	au BufEnter,WinEnter,WinNew,VimResized *,*.*
     \ let &scrolloff=winheight(win_getid())/2
 augroup END
+
+" Completor Settings
+" Use TAB to complete when typing words, else inserts TABs as usual.  Uses
+" dictionary, source files, and completor to find matching words to complete.
+
+" Note: usual completion is on <C-n> but more trouble to press all the time.
+" Never type the same word twice and maybe learn a new spellings!
+" Use the Linux dictionary when spelling is in doubt.
+function! Tab_Or_Complete() abort
+  " If completor is already open the `tab` cycles through suggested completions.
+  if pumvisible()
+    return "\<C-N>"
+  " If completor is not open and we are in the middle of typing a word then
+  " `tab` opens completor menu.
+  elseif col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+    return "\<C-R>=completor#do('complete')\<CR>"
+  else
+    " If we aren't typing a word and we press `tab` simply do the normal `tab`
+    " action.
+    return "\<Tab>"
+  endif
+endfunction
+
+" Use `tab` key to select completions.  Default is arrow keys.
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Use tab to trigger auto completion.  Default suggests completions as you type.
+let g:completor_auto_trigger = 0
+inoremap <expr> <Tab> Tab_Or_Complete()
 

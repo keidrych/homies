@@ -1,0 +1,7 @@
+appdirs==1.4.3
+greenlet==0.4.15
+msgpack==0.6.0
+packaging==16.8
+pynvim==0.3.1
+pyparsing==2.2.0
+six==1.10.0
